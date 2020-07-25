@@ -1,0 +1,45 @@
+﻿@page "/"
+@inject IJSRuntime JSRuntime;
+
+
+<h1>Hello, world!</h1>
+
+<button type="button" class="btn btn-primary" @onclick="ShowAlert" style="display: none">
+    Show alert
+</button>
+
+<button type="button" class="btn btn-primary" onclick="showAlertFromStatic()" style="display: none">
+    Show alert from static
+</button>
+
+<button type="button" class="btn btn-primary" onclick="showAlertFromInstance()">
+    Show alert from instance
+</button>
+
+<SurveyPrompt Title="How is Blazor working for you?" />
+
+
+@code {
+    private async Task ShowAlert()
+    {
+        // Void call of JS function
+        await JSRuntime.InvokeVoidAsync("showAlert", "This is an alert!");
+        // To get returned value call InvokeAsync<T>
+    }
+
+    [JSInvokable]
+    public static string GetMessageStatic() => "Message from static method";
+
+    private DotNetObjectReference<Greeter> greeterRef; // Has to dispose this
+    protected override async Task OnInitializedAsync()
+    {
+        this.greeterRef = DotNetObjectReference.Create(new Greeter());
+        await JSRuntime.InvokeVoidAsync("prepareInstance", this.greeterRef);
+    }
+
+    public class Greeter
+    {
+        [JSInvokable]
+        public string GetMessage() => "Message from instance";
+    }
+}

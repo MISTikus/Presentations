@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30320.27
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JSInterop", "JSInterop.csproj", "{E10BA92D-21C5-49AA-BDFB-BFDE5488CCDC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E10BA92D-21C5-49AA-BDFB-BFDE5488CCDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E10BA92D-21C5-49AA-BDFB-BFDE5488CCDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E10BA92D-21C5-49AA-BDFB-BFDE5488CCDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E10BA92D-21C5-49AA-BDFB-BFDE5488CCDC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E0ED5F51-2508-4996-B65D-EB748D98BD95}
+	EndGlobalSection
+EndGlobal

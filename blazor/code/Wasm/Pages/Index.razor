@@ -1,0 +1,21 @@
+﻿@page "/"
+@page "/{UserName}"
+@page "/{UserName}/{Age:int}"
+
+<h1>
+    Hello, @(string.IsNullOrWhiteSpace(UserName) ? "world" : UserName)!
+</h1>
+
+@if (Age.HasValue)
+{
+    <pre>You are so @(Age > 30 ? "old" : "young")!</pre>
+}
+
+@code {
+    [Parameter]
+    public string UserName { get; set; }
+    [Parameter]
+    public int? Age { get; set; }
+}
+
+<SurveyPrompt Title="How is Blazor working for you?" />

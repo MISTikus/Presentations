@@ -1,0 +1,14 @@
+{
+	"folders": [{
+		"path": "."
+	}],
+	"settings": {
+		"markdown.preview.fontSize": 28,
+		"markdown.preview.lineHeight": 1
+	},
+	"extensions": {
+		"recommendations": [
+			"bierner.markdown-image-size"
+		]
+	}
+}

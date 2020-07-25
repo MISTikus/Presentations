@@ -1,0 +1,18 @@
+﻿@page "/custom"
+@using SampleApp.Shared.Components
+
+<h3>CustomComponents</h3>
+
+<SimpleCard Title="Card title" Subtitle="Card subtitle">
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    <a class="card-link" @onclick="LinkClicked">Some link</a>
+</SimpleCard>
+<SimpleCard Title="Another card title">
+    <p class="card-text">This card has no subtitle as you see...</p>
+    <a class="card-link" @onclick='() => AnotherLinkClicked("Another link clicked")'>Another link</a>
+</SimpleCard>
+
+@code {
+    void LinkClicked() => Console.WriteLine("Link clicked");
+    void AnotherLinkClicked(string text) => Console.WriteLine(text);
+}
