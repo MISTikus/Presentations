@@ -6,7 +6,7 @@
 
 ### Here is the list
 
-1. [Blazor](blazor/pres/00.md)
+1. [Blazor](blazor/prez/00.md)
 
 ---
 
