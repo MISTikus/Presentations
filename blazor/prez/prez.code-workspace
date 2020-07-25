@@ -41,10 +41,5 @@
 		"editor.formatOnSave": false,
 		"//k": "Disable preview so we can open all files at once",
 		"workbench.editor.enablePreview": false
-	},
-	"extensions": {
-		"recommendations": [
-			"bierner.markdown-image-size"
-		]
 	}
 }
