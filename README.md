@@ -13,7 +13,6 @@
 ### For use you need
 
 - [Visual Studio Code](https://code.visualstudio.com)
-- `VSCode` extension [Markdown Image Size](https://marketplace.visualstudio.com/items?itemName=bierner.markdown-image-size)
 
 ---
 
