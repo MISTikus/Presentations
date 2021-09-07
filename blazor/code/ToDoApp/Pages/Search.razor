@@ -1,0 +1,55 @@
+@page "/search/{query}"
+
+@inject LocalStorageService storage;
+
+<h1>Поиск</h1>
+
+@{
+    var num = 1; 
+}
+@foreach (var item in this.filtered)
+{
+    <ItemCard Value="item" RowNumber="num++" ValueChanged="ItemChanged" />
+}
+
+
+@code {
+    private bool shouldReload;
+
+    [Parameter] public string Query { get; set; }
+
+    private List<ToDoItem> items = new();
+    private IEnumerable<ToDoItem> filtered => items
+    .Where(x => x.Name.ToLower().Contains(Query.ToLower()) || x.Content.ToLower().Contains(Query.ToLower()))
+    .OrderBy(x => x.Created);
+
+    protected override void OnInitialized()
+    {
+        shouldReload = true;
+        storage.KeyDataChanged += (s, e) => HandleStorageChanged(e);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (shouldReload)
+        {
+            items = await storage.GetAsync<List<ToDoItem>>(Consts.ItemsStorageKey);
+            shouldReload = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task ItemChanged(ToDoItem item)
+    {
+        this.items.RemoveAll(x => x.Id == item.Id);
+        this.items.Add(item);
+        await storage.SetAsync(Consts.ItemsStorageKey, items);
+    }
+
+    private void HandleStorageChanged(string key)
+    {
+        if (key != Consts.ItemsStorageKey)
+            return;
+        shouldReload = true;
+    }
+}

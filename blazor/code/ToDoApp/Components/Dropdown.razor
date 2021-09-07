@@ -1,0 +1,45 @@
+<div class="btn-group">
+    <button type="button" class="btn btn-outline-dark btn-sm @(this.isShown ? "show" : "")" @onclick="ToggleShown">
+        ...
+    </button>
+    <ul class="dropdown-menu dropdown-menu-dark @(this.isShown ? "show" : "")">
+        @foreach (var item in Items)
+        {
+            @if (item.IsDivider)
+            {
+                <li><hr class="dropdown-divider"></li>
+            }
+            else
+            {
+                <li>
+                    <button class="dropdown-item" @onclick="async () => await HandleClickAsync(item)">@item.Caption</button>
+                </li>
+            }
+        }
+    </ul>
+</div>
+
+@code {
+    private bool isShown = false;
+    private IEnumerable<ToDoState> states => Enum.GetValues<ToDoState>().Where(x => x != Value);
+
+    [Parameter] public ToDoState Value { get; set; }
+    [Parameter] public EventCallback<ToDoState> ValueChanged { get; set; }
+    [Parameter] public IEnumerable<DropDownItem> Items { get; set; }
+
+    private void ToggleShown() => this.isShown = !this.isShown;
+
+    private async Task ItemClicked(ToDoState state)
+    {
+        await ValueChanged.InvokeAsync(state);
+        ToggleShown();
+    }
+
+    private async Task HandleClickAsync(DropDownItem item)
+    {
+        if (item.ClickAction is not null)
+            item.ClickAction();
+        else
+            await item.AsyncClickAction();
+    }
+}
