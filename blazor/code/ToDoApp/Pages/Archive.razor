@@ -1,49 +1,14 @@
 @page "/archive"
+@inherits ListBase
 
-@inject LocalStorageService storage;
+<h1 class="main__title">Архив</h1>
 
-<h1>Архив</h1>
-
-@{
-    var num = 1;
-}
-@foreach (var item in this.items.Where(x => x.State == ToDoState.Finished).OrderBy(x => x.Archived))
-{
-    <ItemCard Value="item" RowNumber="num++" ValueChanged="ItemChanged" />
-}
-
-@code {
-    private bool shouldReload;
-
-    private List<ToDoItem> items = new();
-
-    protected override void OnInitialized()
-    {
-        shouldReload = true;
-        storage.KeyDataChanged += (s, e) => HandleStorageChanged(e);
+<div class="main__todolist todolist">
+    @{
+        var num = 1;
     }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    @foreach (var item in this.items.Where(x => x.State == ToDoState.Finished).OrderBy(x => x.Archived))
     {
-        if (shouldReload)
-        {
-            items = await storage.GetAsync<List<ToDoItem>>(Consts.ItemsStorageKey);
-            shouldReload = false;
-            StateHasChanged();
-        }
+        <ItemCard Value="item" RowNumber="num++" ValueChanged="ItemChanged" />
     }
-
-    private async Task ItemChanged(ToDoItem item)
-    {
-        this.items.RemoveAll(x => x.Id == item.Id);
-        this.items.Add(item);
-        await storage.SetAsync(Consts.ItemsStorageKey, items);
-    }
-
-    private void HandleStorageChanged(string key)
-    {
-        if (key != Consts.ItemsStorageKey)
-            return;
-        shouldReload = true;
-    }
-}
+</div>

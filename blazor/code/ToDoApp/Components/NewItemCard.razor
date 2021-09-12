@@ -1,64 +1,35 @@
-@inject IJSRuntime js;
+@inherits ItemCardBase
 
-<nav class="navbar navbar-dark bg-secondary p-0">
-    <div class="bg-success" style="width: 100%; cursor: pointer; padding: .25rem .5rem">
-
-        <span class="navbar-brand col pl-0" style="padding-right: 40px; @(!this.collapsed ? "display: none;": "")"
-            @onclick="ToggleCollapse">
-            <span>Добавить</span>
-        </span>
-
-        <span class="navbar-brand col pl-0" style="padding-right: 40px; @(this.collapsed ? "display: none;": "")">
-            <input type="text" class="form-control" id="name" placeholder="Заголовок" @bind-value="this.name">
-        </span>
-
-        <i class="oi oi-chevron-@(this.collapsed ? "bottom" : "top") text-white position-absolute"
-            style="top: 16px; right: 1rem;" @onclick="ToggleCollapse" />
-    </div>
-    <div class="navbar-collapse p-2 @(this.collapsed ? "collapse" : "")">
-        <textarea class="form-control form-control-sm" placeholder="Подробности"
-            @oninput="HandleContent">@this.content</textarea>
-        <div class="btn-group">
-            <button type="button" class="btn btn-primary btn-sm" @onclick="OnSave">
-                Сохранить
-            </button>
+<div class="todolist__item todoitem--add-new">
+    <div class="todoitem__header todoitem__header--add">
+        <div class="todoitem__label @(!this.collapsed ? "hidden": "")" @onclick="ToggleCollapse">
+            <p class="todoitem__title">Добавить</p>
+        </div>
+        <input placeholder="Заголовок" type="text" @bind-value="this.name"
+            class="todoitem__title todoitem__input input @(this.collapsed ? "hidden": "")" />
+        <div class="todoitem__toggler toggler @(this.collapsed ? "" : "toggler--opened")" @onclick="ToggleCollapse">
         </div>
     </div>
-</nav>
+    <form class="todolist__form @(this.collapsed ? "hidden": "")">
+        <textarea placeholder="Описание" type="text" class="todoitem__textarea textarea"
+            @oninput="HandleContent">@this.content</textarea>
+        <button class="btn btn--primary" @onclick="OnSave">Добавить</button>
+    </form>
+</div>
 
 
 @code {
-    private bool collapsed = true;
-    private bool focus;
-    private bool isEven => RowNumber % 2 > 0;
-
-    private string name = string.Empty;
-    private string content = string.Empty;
-
-    [Parameter] public int RowNumber { get; set; }
     [Parameter] public EventCallback<ToDoItem> Save { get; set; }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (this.focus)
-        {
-            await js.InvokeVoidAsync("focusElement", "#name");
-            this.focus = false;
-        }
-    }
-
-    private void ToggleCollapse()
-    {
-        this.collapsed = !this.collapsed;
-        if (!this.collapsed)
-            this.focus = true;
-    }
-
-    private void HandleContent(ChangeEventArgs args) => this.content = (string)args.Value;
 
     private async Task OnSave()
     {
         await Save.InvokeAsync(new(Guid.NewGuid(), DateTime.UtcNow, name, content));
         ToggleCollapse();
+    }
+
+    protected override void ToggleCollapse()
+    {
+        base.ToggleCollapse();
+        Focus();
     }
 }

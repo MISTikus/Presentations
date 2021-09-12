@@ -1,20 +1,3 @@
-<div style="width:60%; margin-left:20%;">
-
-# <img src="./images/blazor_logo_transparent.png " width="50" /> Practice
-
-<div style="text-align:right;">
-
-###### [[<= BACK]](08.03.01.md) | [[< LIST >]](08.md) | [[NEXT =>]](08.03.03.md)
-
-</div>
-
----
-
-## Реализация ч.3. Компонент
-
-### 3. `Components\ItemCardBase.cs`
-
-```csharp
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System.Threading.Tasks;
@@ -45,12 +28,3 @@ namespace ToDoApp.Components {
         protected virtual void HandleContent(ChangeEventArgs args) => this.content = (string) args.Value;
     }
 }
-```
-
----
-
-<div style="text-align:right;">
-
-###### [[<= BACK]](08.03.01.md) | [[< LIST >]](08.md) | [[NEXT =>]](08.03.03.md)
-
-</div>

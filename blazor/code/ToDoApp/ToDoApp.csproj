@@ -10,4 +10,13 @@
     <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="../Template/fonts/*.*" LinkBase="wwwroot/fonts" CopyToOutputDirectory="PreserveNewest">
+      <Link>%(LinkBase)\%(Filename)%(Extension)</Link>
+    </None>
+    <None Include="../Template/styles/*.*" LinkBase="wwwroot/styles" CopyToOutputDirectory="PreserveNewest">
+      <Link>%(LinkBase)\%(Filename)%(Extension)</Link>
+    </None>
+  </ItemGroup>
+
 </Project>

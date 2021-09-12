@@ -1,40 +1,29 @@
 @inject NavigationManager navigator;
 @inject IJSRuntime js;
 
-<style>
-    .main-header {
-        line-height: 1;
-        border-bottom: 1px solid #e5e5e5;
-    }
-</style>
-
-<header class="main-header py-3">
-    <div class="row flex-nowrap justify-content-between align-items-center">
-        <ul class="nav col-4">
-            <li class="nav-item">
-                <a class="nav-link @(IsCurrentPage(string.Empty) ? "disabled" : "")" href="/">Мои дела</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link @(IsCurrentPage("archive") ? "disabled" : "")" href="/archive">Архив</a>
-            </li>
-        </ul>
-        <div class="col-4 text-center">
-            <a class="blog-header-logo text-dark" href="/">ToDo App</a>
-        </div>
-        <div class="col-4 d-flex justify-content-end align-items-center">
-            <div class="input-group input-group-sm" style="@(!this.searching ? "display: none;" : "")">
-                <input id="search" type="text" class="form-control" placeholder="Поиск" @bind-value="this.searchQuery"
-                    @onkeyup="OnSearch">
-                <button class="btn btn-sm btn-outline-secondary" @onclick="() => OnSearch()">
-                    <span class="oi oi-magnifying-glass"></span>
-                </button>
-            </div>
-
-            <button class="btn btn-sm btn-light text-muted" @onclick="ToggleSearching"
-                style="@(this.searching ? "display: none;" : "")">
-                <span class="oi oi-magnifying-glass"></span>
-            </button>
-        </div>
+<header class="header">
+    <div class="header__content content">
+        <div class="header__logo">ToDo App</div>
+        <nav class="header__nav nav">
+            <ul class="nav__nav">
+                <li class="nav__item">
+                    <a href="/" class="@(IsCurrentPage(string.Empty) ? "disabled" : "")">Мои дела</a>
+                </li>
+                <li class="nav__item">
+                    <a href="/archive" class="@(IsCurrentPage("archive") ? "disabled" : "")">Архив</a>
+                </li>
+            </ul>
+        </nav>
+        <form class="header__search search-bar @(this.searching ? "" : "hidden")">
+            <input class="search-bar__input" placeholder="Я ищу..." type="text" required @bind-value="this.searchQuery"
+                @onkeyup="OnSearch" />
+            <button class="search-bar__btn btn btn--search" type="submit" @onclick="() => OnSearch()">Search</button>
+        </form>
+        @if (!this.searching)
+        {
+            <button class="header__search search-bar__btn btn btn--search btn--search-round"
+            @onclick="ToggleSearching">Search</button>
+        }
     </div>
 </header>
 
@@ -54,7 +43,7 @@
     {
         if (this.focusSearch)
         {
-            await FocusAsync("#search");
+            await FocusAsync("form>input");
             this.focusSearch = false;
         }
     }

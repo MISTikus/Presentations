@@ -1,54 +1,50 @@
-@inject IJSRuntime js;
+@inherits ItemCardBase
 
-<nav class="navbar navbar-dark bg-secondary p-0">
-    @if (this.isEditEnabled)
-    {
-        <div class="bg-success" style="width: 100%; cursor: pointer; padding: .25rem .5rem">
-
-            <span class="navbar-brand col pl-0" style="padding-right: 40px; @(!this.collapsed ? "display: none;": "")"
-            @onclick="ToggleCollapse">
-                <span>@Value.Name</span>
-            </span>
-
-            <span class="navbar-brand col pl-0" style="padding-right: 40px; @(this.collapsed ? "display: none;": "")">
-                <input type="text" class="form-control" id="name" placeholder="Заголовок" @bind-value="this.name">
-            </span>
-
-            <i class="oi oi-chevron-@(this.collapsed ? "bottom" : "top") text-white position-absolute"
-            style="top: 16px; right: 1rem;" @onclick="ToggleCollapse" />
-        </div>
-        <div class="navbar-collapse p-2 @(this.collapsed ? "collapse" : "")">
-            <textarea class="form-control form-control-sm" placeholder="Подробности"
-            @oninput="HandleContent">@this.content</textarea>
-            <div class="btn-group">
-                <button type="button" class="btn btn-primary btn-sm" @onclick="async () => await StateChanged(Value.State)">
-                    Сохранить
-                </button>
+@if (this.isEditEnabled)
+{
+    <div class="todolist__item todoitem--add-new">
+        <div class="todoitem__header">
+            <p class="todoitem__index">@RowNumber</p>
+            <p class="todoitem__title @(!this.collapsed ? "hidden": "")" @onclick="ToggleCollapse">@Value.Name</p>
+            <input placeholder="Заголовок" type="text" @bind-value="this.name"
+                class="todoitem__title todoitem__input input @(this.collapsed ? "hidden": "")" />
+            <div class="todoitem__toggler toggler @(this.collapsed ? "" : "toggler--opened")" @onclick="ToggleCollapse">
             </div>
         </div>
-    }
-    else
-    {
-        <div class="bg-@(isEven ? "dark" : "primary")" style="width: 100%; cursor: pointer; padding: .25rem .5rem"
-        @onclick="ToggleCollapse">
-            <span class="navbar-brand">
-                @(RowNumber). @(Value.Name)
-
+        <form class="todolist__form @(this.collapsed ? "hidden": "")">
+            <textarea placeholder="Описание" type="text" class="todoitem__textarea textarea"
+                @oninput="HandleContent">@this.content</textarea>
+            <button class="btn btn--primary" type="submit"
+                @onclick="async () => await StateChanged(Value.State)">Сохранить</button>
+        </form>
+    </div>
+}
+else
+{
+    <div class="todolist__item todoitem">
+        <div class="todoitem__header todoitem__header--@(isEven ? "even" : "odd")">
+            <div class="todoitem__label" @onclick="ToggleCollapse">
+                <p class="todoitem__index">@(RowNumber).</p>
+                <p class="todoitem__title">@Value.Name</p>
                 @{
-                    var dateString = (Value.Archived ?? Value.Created).ToString("dd.MM.yy HH:mm");
+                    var dateString = (Value.Archived ?? Value.Created).ToString("dd MMM yy HH:mm");
                     var caption = Value.Archived is null ? "Создано" : "Завершено";
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-info ml-2"
-                    title="@caption: @dateString">
-                        @(dateString)
-                    </span>
+                    var chipType = Value.Archived is null ? "created" : "archived";
+                    <p class="todoitem__chip chip chip--@chipType" title="@caption: @dateString">@dateString</p>
                 }
+            </div>
+            <div class="todoitem__toggler toggler @(this.collapsed ? "" : "toggler--opened")" @onclick="ToggleCollapse">
+            </div>
+        </div>
+        <pre class="todoitem__content @(this.collapsed ? "hidden" : "")">
+            @Value.Content
+            <span class="todoitem__buttons">
+                <button class="btn btn--text" type="submit" @onclick="EnableEdit">Изменить</button>
+                <button class="btn btn--text" type="submit"
+                    @onclick="async () => await StateChanged(Value.State == ToDoState.Created ? ToDoState.Finished : ToDoState.Created)">
+                    @(Value.State == ToDoState.Created ? "Завершить" : "Восстановить")
+                </button>
             </span>
-            <i class="oi oi-chevron-@(this.collapsed ? "bottom" : "top") text-white position-absolute"
-            style="top: 16px; right: 1rem;" />
-        </div>
-        <div class="navbar-collapse p-2 @(this.collapsed ? "collapse" : "")">
-            <pre class="card-text mb-auto">@(Value.Content)</pre>
-            <Dropdown Items="GetDropItems()" Value="Value.State" ValueChanged="StateChanged" />
-        </div>
-    }
-</nav>
+        </pre>
+    </div>
+}

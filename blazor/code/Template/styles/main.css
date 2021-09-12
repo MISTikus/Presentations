@@ -91,11 +91,14 @@ body {
   background: rgba(0, 0, 0, 0.25);
 }
 
-.hero {
+.main {
   padding: 24px 0 32px;
+  margin-bottom: 56px;
+  max-height: calc(100vh - 56px - 56px - 56px);
+  overflow-y: auto;
 }
 
-.hero__title {
+.main__title {
   font-size: 36px;
   font-weight: bold;
   margin-bottom: 24px;
@@ -114,6 +117,22 @@ body {
   border-bottom: 2px solid #626262;
 }
 
+.todoitem__header--odd {
+  background-color: slategray;
+}
+
+.todoitem__header--add {
+  background-color: midnightblue;
+}
+
+.todoitem__label {
+  width: calc(100% - 40px);
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+}
+
 .todoitem__content {
   background: #626262;
   padding: 16px 24px;
@@ -123,7 +142,7 @@ body {
 
 .todoitem__index {
   font-size: 12px;
-  margin-right: 4px;
+  margin-right: 8px;
 }
 
 .todoitem__title {
@@ -136,7 +155,7 @@ body {
 }
 
 .todoitem--add-new {
-  background: dodgerblue;
+  background: cornflowerblue;
 }
 
 .todolist__form {
@@ -145,7 +164,8 @@ body {
   flex-direction: column;
 }
 
-.input, .textarea {
+.input,
+.textarea {
   border: none;
   border-bottom: 2px solid white;
   background: transparent;
@@ -156,14 +176,16 @@ body {
 }
 
 .todoitem__input {
-  margin-bottom: 8px;
+  width: 100%;
+  color: inherit;
 }
 
 .todoitem__textarea {
   margin-bottom: 8px;
 }
 
-.input:focus, .textarea:focus {
+.input:focus,
+.textarea:focus {
   box-shadow: none;
   outline: none;
   background: rgba(255, 255, 255, 0.5);
@@ -212,6 +234,9 @@ body {
   background: #ffffff;
   height: 56px;
   color: #151515;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
 
 .chip {
@@ -222,6 +247,11 @@ body {
   background: white;
   color: black;
   padding: 0 8px;
+}
+
+.chip--archived {
+  background-color: maroon;
+  color: antiquewhite;
 }
 
 .footer__content {
@@ -235,6 +265,14 @@ body {
   background: #ffffff;
   height: 56px;
   color: #151515;
+}
+
+.header__logo {
+  font-weight: bold;
+}
+
+.header__nav {
+  margin-left: 2em;
 }
 
 .header__content {
@@ -306,4 +344,43 @@ body {
   border: none;
   border-radius: 0;
   font-weight: bold;
+}
+
+a {
+  text-decoration: inherit;
+  color: inherit;
+  height: 100%;
+  padding-top: 1.5em;
+}
+
+a:disabled,
+a.disabled {
+  color: currentcolor;
+  cursor: not-allowed;
+  opacity: 0.5;
+  text-decoration: none;
+  pointer-events: none;
+}
+
+.hidden {
+  display: none;
+}
+
+#blazor-error-ui {
+  background: lightyellow;
+  bottom: 0;
+  box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+  display: none;
+  left: 0;
+  padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+  position: fixed;
+  width: 100%;
+  z-index: 1000;
+}
+
+#blazor-error-ui .dismiss {
+  cursor: pointer;
+  position: absolute;
+  right: 0.75rem;
+  top: 0.5rem;
 }

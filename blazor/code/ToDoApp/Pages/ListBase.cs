@@ -1,20 +1,3 @@
-<div style="width:60%; margin-left:20%;">
-
-# <img src="./images/blazor_logo_transparent.png " width="50" /> Practice
-
-<div style="text-align:right;">
-
-###### [[<= BACK]](08.04.01.md) | [[< LIST >]](08.md) | [[NEXT =>]](08.04.03.md)
-
-</div>
-
----
-
-## Реализация ч.4. Страницы
-
-### 3. `Pages\ListBase.cs`
-
-```csharp
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -54,12 +37,3 @@ namespace ToDoApp.Pages {
         }
     }
 }
-```
-
----
-
-<div style="text-align:right;">
-
-###### [[<= BACK]](08.04.01.md) | [[< LIST >]](08.md) | [[NEXT =>]](08.04.03.md)
-
-</div>

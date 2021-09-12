@@ -1,32 +1,26 @@
 ﻿@page "/"
+@inherits ListBase
 
-@inject LocalStorageService storage;
+<h1 class="main__title">Мои дела</h1>
 
-<h1>Мои дела</h1>
+<div class="main__todolist todolist">
 
-@{ var num = 1; }
-@foreach (var item in this.items.Where(x => x.State != ToDoState.Finished).OrderBy(x => x.Created))
-{
-    <ItemCard Value="item" RowNumber="num++" ValueChanged="ItemChanged" />
-}
-<NewItemCard RowNumber="num++" Save="AddItem" />
+    @{ var num = 1; }
+    @foreach (var item in this.items.Where(x => x.State != ToDoState.Finished).OrderBy(x => x.Created))
+    {
+        <ItemCard Value="item" RowNumber="num++" ValueChanged="ItemChanged" />
+    }
+
+    <NewItemCard RowNumber="num++" Save="AddItem" />
+</div>
 
 @code {
-    private bool shouldReload;
-
-    private List<ToDoItem> items = new();
-
-    protected override void OnInitialized()
-    {
-        shouldReload = true;
-        storage.KeyDataChanged += (s,e) => HandleStorageChanged(e);
-    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (shouldReload)
         {
-            items = await storage.GetAsync<List<ToDoItem>>(Consts.ItemsStorageKey);
+            await base.OnAfterRenderAsync(firstRender);
             if (items is null)
             {
                 items = new()
@@ -36,30 +30,15 @@
                     new ToDoItem(Guid.NewGuid(), DateTime.UtcNow.AddDays(-10), "GDG DevFest 2021", "Надо подготовиться...\nНе забыть..."),
                     new ToDoItem(Guid.NewGuid(), DateTime.UtcNow.AddDays(-12), "Other", "Need to do something else..."),
                 };
-                await storage.SetAsync(Consts.ItemsStorageKey, items);
+                await Storage.SetAsync(Consts.ItemsStorageKey, items);
             }
-            shouldReload = false;
             StateHasChanged();
         }
-    }
-
-    private async Task ItemChanged(ToDoItem item)
-    {
-        this.items.RemoveAll(x => x.Id == item.Id);
-        this.items.Add(item);
-        await storage.SetAsync(Consts.ItemsStorageKey, items);
     }
 
     private async Task AddItem(ToDoItem item)
     {
         this.items.Add(item);
-        await storage.SetAsync(Consts.ItemsStorageKey, items);
-    }
-
-    private void HandleStorageChanged(string key)
-    {
-        if (key != Consts.ItemsStorageKey)
-            return;
-        shouldReload = true;
+        await Storage.SetAsync(Consts.ItemsStorageKey, items);
     }
 }
