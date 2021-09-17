@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using ToDoApp.Services;
 
 namespace ToDoApp {
     public class Program {
@@ -13,6 +12,7 @@ namespace ToDoApp {
 
             builder.Services.AddScoped(s => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
             builder.Services.AddScoped<LocalStorageService>();
+            builder.Services.AddScoped<InteropService>();
 
             await builder.Build().RunAsync();
         }

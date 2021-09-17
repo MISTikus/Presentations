@@ -3,7 +3,7 @@ using System;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace ToDoApp.Services {
+namespace ToDoApp {
     public class LocalStorageService {
         private const string getFunctionName = "localStorage.getItem";
         private const string setFunctionName = "localStorage.setItem";

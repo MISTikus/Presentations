@@ -1,41 +1,21 @@
 ﻿@page "/"
+@namespace ToDoApp
 @inherits ListBase
 
 <h1 class="main__title">Мои дела</h1>
 
 <div class="main__todolist todolist">
-
-    @{ var num = 1; }
-    @foreach (var item in this.items.Where(x => x.State != ToDoState.Finished).OrderBy(x => x.Created))
-    {
-        <ItemCard Value="item" RowNumber="num++" ValueChanged="ItemChanged" />
+    @{ 
+        var num = 1; 
+        @foreach (var item in this.items.Where(x => x.State != ToDoState.Finished).OrderBy(x => x.Created))
+        {
+            <ItemCard Value="item" RowNumber="num++" ValueChanged="ItemChanged" />
+        }
+        <NewItemCard RowNumber="num++" Save="AddItem" />
     }
-
-    <NewItemCard RowNumber="num++" Save="AddItem" />
 </div>
 
 @code {
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (shouldReload)
-        {
-            await base.OnAfterRenderAsync(firstRender);
-            if (items is null)
-            {
-                items = new()
-                {
-                    new ToDoItem(Guid.NewGuid(), DateTime.UtcNow.AddHours(-2), "Сходить в магазин", "Молоко\nКефир\nБатон\nСемечки"),
-                    new ToDoItem(Guid.NewGuid(), DateTime.UtcNow.AddDays(-2), "Звякнуть шэфу", "По поводу общего собрания в субботу.\nНе забудь, что ты прилежный сотрудник!\nИ не спорь!"),
-                    new ToDoItem(Guid.NewGuid(), DateTime.UtcNow.AddDays(-10), "GDG DevFest 2021", "Надо подготовиться...\nНе забыть..."),
-                    new ToDoItem(Guid.NewGuid(), DateTime.UtcNow.AddDays(-12), "Other", "Need to do something else..."),
-                };
-                await Storage.SetAsync(Consts.ItemsStorageKey, items);
-            }
-            StateHasChanged();
-        }
-    }
-
     private async Task AddItem(ToDoItem item)
     {
         this.items.Add(item);

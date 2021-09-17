@@ -1,5 +1,7 @@
+@namespace ToDoApp
+
 @inject NavigationManager navigator;
-@inject IJSRuntime js;
+@inject InteropService interop;
 
 <header class="header">
     <div class="header__content content">
@@ -7,22 +9,37 @@
         <nav class="header__nav nav">
             <ul class="nav__nav">
                 <li class="nav__item">
-                    <a href="/" class="@(IsCurrentPage(string.Empty) ? "disabled" : "")">Мои дела</a>
+                    <a href="/"
+                       class="@(IsPage(string.Empty) ? "disabled" : "")">
+                        Мои дела
+                    </a>
                 </li>
                 <li class="nav__item">
-                    <a href="/archive" class="@(IsCurrentPage("archive") ? "disabled" : "")">Архив</a>
+                    <a href="/archive"
+                       class="@(IsPage("archive") ? "disabled" : "")">
+                        Архив
+                    </a>
                 </li>
             </ul>
         </nav>
-        <form class="header__search search-bar @(this.searching ? "" : "hidden")">
-            <input class="search-bar__input" placeholder="Я ищу..." type="text" required @bind-value="this.searchQuery"
-                @onkeyup="OnSearch" />
-            <button class="search-bar__btn btn btn--search" type="submit" @onclick="() => OnSearch()">Search</button>
-        </form>
+        <div class="header__search search-bar
+              @(this.searching ? "" : "hidden")">
+            <input class="search-bar__input" placeholder="Я ищу..."
+                   type="text" required
+                   @bind-value="this.searchQuery"
+                   @onkeyup="OnSearch" />
+            <button class="search-bar__btn btn btn--search"
+                    type="submit" @onclick="() => OnSearch()">
+                Search
+            </button>
+        </div>
         @if (!this.searching)
         {
-            <button class="header__search search-bar__btn btn btn--search btn--search-round"
-            @onclick="ToggleSearching">Search</button>
+            <button class="header__search search-bar__btn
+                    btn btn--search btn--search-round"
+                    @onclick="ToggleSearching">
+                Search
+            </button>
         }
     </div>
 </header>
@@ -36,25 +53,28 @@
     protected override void OnInitialized()
     {
         ApplyLocationChanged();
-        navigator.LocationChanged += (s, a) => ApplyLocationChanged();
+        navigator.LocationChanged += (s, a) 
+            => ApplyLocationChanged();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (this.focusSearch)
         {
-            await FocusAsync("form>input");
+            await interop.FocusAsync("form>input");
             this.focusSearch = false;
         }
     }
 
     private void ApplyLocationChanged()
     {
-        currentPage = navigator.Uri.Replace(navigator.BaseUri, "").Trim();
+        currentPage = navigator.Uri
+            .Replace(navigator.BaseUri, "")
+            .Trim();
         StateHasChanged();
     }
 
-    private bool IsCurrentPage(string route) => currentPage == route;
+    private bool IsPage(string route) => currentPage == route;
 
     private void ToggleSearching()
     {
@@ -67,13 +87,13 @@
 
     private void OnSearch(KeyboardEventArgs args = null)
     {
-        if (args is not null && args.Code != "Enter" && args.Code != "NumpadEnter")
+        if (args is not null &&
+            args.Code != "Enter" &&
+            args.Code != "NumpadEnter")
             return;
 
         this.searching = !this.searching;
         navigator.NavigateTo($"search/{this.searchQuery}");
         searchQuery = string.Empty;
     }
-
-    private async Task FocusAsync(string selector) => await js.InvokeVoidAsync("focusElement", selector);
 }

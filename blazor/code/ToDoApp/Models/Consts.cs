@@ -1,4 +1,4 @@
-namespace ToDoApp.Models {
+namespace ToDoApp {
     public static class Consts {
         public const string ItemsStorageKey = "todoitems";
     }

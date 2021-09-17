@@ -1,4 +1,4 @@
-namespace ToDoApp.Models {
+namespace ToDoApp {
     public enum ToDoState : byte {
         Created,
         Finished

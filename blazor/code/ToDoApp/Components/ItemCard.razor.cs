@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Threading.Tasks;
-using ToDoApp.Models;
 
-namespace ToDoApp.Components {
+namespace ToDoApp {
     public partial class ItemCard : ItemCardBase {
         private bool isEditEnabled;
 
@@ -36,7 +35,7 @@ namespace ToDoApp.Components {
         }
 
         private void EnableEdit() {
-            this.isEditEnabled = true;            
+            this.isEditEnabled = true;
             Focus();
             StateHasChanged();
         }

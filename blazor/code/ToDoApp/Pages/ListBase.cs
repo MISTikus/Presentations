@@ -1,10 +1,8 @@
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ToDoApp.Models;
-using ToDoApp.Services;
 
-namespace ToDoApp.Pages {
+namespace ToDoApp {
     public abstract class ListBase : ComponentBase {
         protected bool shouldReload;
         protected List<ToDoItem> items = new();
@@ -18,7 +16,7 @@ namespace ToDoApp.Pages {
 
         protected override async Task OnAfterRenderAsync(bool firstRender) {
             if (shouldReload) {
-                items = await Storage.GetAsync<List<ToDoItem>>(Consts.ItemsStorageKey);
+                items = await Storage.GetAsync<List<ToDoItem>>(Consts.ItemsStorageKey) ?? new();
                 shouldReload = false;
                 StateHasChanged();
             }
