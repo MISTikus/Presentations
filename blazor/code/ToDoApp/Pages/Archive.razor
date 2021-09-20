@@ -1,0 +1,15 @@
+@page "/archive"
+@namespace ToDoApp
+@inherits ListBase
+
+<h1 class="main__title">Архив</h1>
+
+<div class="main__todolist todolist">
+    @{
+        var num = 1;
+        @foreach (var item in this.items.Where(x => x.State == ToDoState.Finished).OrderBy(x => x.Archived))
+        {
+            <ItemCard Value="item" RowNumber="num++" ValueChanged="ItemChanged" />
+        }
+    }
+</div>

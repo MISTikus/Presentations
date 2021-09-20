@@ -6,7 +6,7 @@
 
 ### Here is the list
 
-1. [Blazor](blazor/prez/00.md)
+1. [Не JSом единым. Blazor workshop (Upd. 2021)](blazor/prez/00.md)
 
 ---
 

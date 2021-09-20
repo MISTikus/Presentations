@@ -1,0 +1,51 @@
+@namespace ToDoApp
+@inherits ItemCardBase
+
+<div class="todolist__item todoitem--add-new">
+    <div class="todoitem__header todoitem__header--add">
+        <div class="todoitem__label
+             @(!this.collapsed ? "hidden": "")"
+             @onclick="ToggleCollapse">
+            <p class="todoitem__title">Добавить</p>
+        </div>
+        <input placeholder="Заголовок" type="text"
+               @bind-value="this.name"
+               class="todoitem__title todoitem__input input
+               @(this.collapsed ? "hidden": "")" />
+        <div class="todoitem__toggler toggler
+             @(this.collapsed ? "" : "toggler--opened")"
+             @onclick="ToggleCollapse">
+        </div>
+    </div>
+    <div class="todolist__form @(this.collapsed ? "hidden": "")">
+        <textarea placeholder="Описание" type="text"
+                  class="todoitem__textarea textarea"
+                  @oninput="HandleContent">
+            @this.content
+        </textarea>
+        <button class="btn btn--primary" @onclick="OnSave">
+            Добавить
+        </button>
+    </div>
+</div>
+
+
+@code {
+    [Parameter] public EventCallback<ToDoItem> Save { get; set; }
+
+    private async Task OnSave()
+    {
+        await Save.InvokeAsync(new(
+            Guid.NewGuid(), DateTime.UtcNow, 
+            name, content));
+        ToggleCollapse();
+        this.name = string.Empty;
+        this.content = string.Empty;
+    }
+
+    protected override void ToggleCollapse()
+    {
+        base.ToggleCollapse();
+        Focus();
+    }
+}

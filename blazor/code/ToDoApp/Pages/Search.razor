@@ -1,0 +1,23 @@
+@page "/search/{query}"
+@namespace ToDoApp
+@inherits ListBase
+
+<h1 class="main__title">Поиск</h1>
+
+<div class="main__todolist todolist">
+    @{
+        var num = 1;
+        @foreach (var item in this.filtered)
+        {
+            <ItemCard Value="item" RowNumber="num++" ValueChanged="ItemChanged" />
+        }
+    }
+</div>
+
+
+@code {
+    [Parameter] public string Query { get; set; }
+    private IEnumerable<ToDoItem> filtered => items
+        .Where(x => x.Name.ToLower().Contains(Query.ToLower()) || x.Content.ToLower().Contains(Query.ToLower()))
+        .OrderBy(x => x.Created);
+}

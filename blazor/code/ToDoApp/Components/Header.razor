@@ -1,0 +1,99 @@
+@namespace ToDoApp
+
+@inject NavigationManager navigator;
+@inject InteropService interop;
+
+<header class="header">
+    <div class="header__content content">
+        <div class="header__logo">ToDo App</div>
+        <nav class="header__nav nav">
+            <ul class="nav__nav">
+                <li class="nav__item">
+                    <a href="/"
+                       class="@(IsPage(string.Empty) ? "disabled" : "")">
+                        Мои дела
+                    </a>
+                </li>
+                <li class="nav__item">
+                    <a href="/archive"
+                       class="@(IsPage("archive") ? "disabled" : "")">
+                        Архив
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div class="header__search search-bar
+              @(this.searching ? "" : "hidden")">
+            <input class="search-bar__input" placeholder="Я ищу..."
+                   type="text" required
+                   @bind-value="this.searchQuery"
+                   @onkeyup="OnSearch" />
+            <button class="search-bar__btn btn btn--search"
+                    type="submit" @onclick="() => OnSearch()">
+                Search
+            </button>
+        </div>
+        @if (!this.searching)
+        {
+            <button class="header__search search-bar__btn
+                    btn btn--search btn--search-round"
+                    @onclick="ToggleSearching">
+                Search
+            </button>
+        }
+    </div>
+</header>
+
+@code {
+    private bool searching;
+    private bool focusSearch;
+    private string currentPage;
+    private string searchQuery = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        ApplyLocationChanged();
+        navigator.LocationChanged += (s, a) 
+            => ApplyLocationChanged();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (this.focusSearch)
+        {
+            await interop.FocusAsync(".search-bar__input");
+            this.focusSearch = false;
+        }
+    }
+
+    private void ApplyLocationChanged()
+    {
+        currentPage = navigator.Uri
+            .Replace(navigator.BaseUri, "")
+            .Trim();
+        StateHasChanged();
+    }
+
+    private bool IsPage(string route) => currentPage == route;
+
+    private void ToggleSearching()
+    {
+        this.searching = !this.searching;
+        if (!searching)
+            searchQuery = string.Empty;
+        else
+            this.focusSearch = true;
+    }
+
+    private void OnSearch(KeyboardEventArgs args = null)
+    {
+        if (args is not null &&
+            args.Code != "Enter" &&
+            args.Code != "NumpadEnter")
+            return;
+
+        this.searching = !this.searching;
+        navigator.NavigateTo($"search/{this.searchQuery}");
+        searchQuery = string.Empty;
+    }
+}
