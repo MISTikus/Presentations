@@ -5,19 +5,21 @@
 {
     <div class="todolist__item todoitem--add-new">
         <div class="todoitem__header">
-            <p class="todoitem__index">@RowNumber</p>
-            <p class="todoitem__title @(!this.collapsed ? "hidden": "")" @onclick="ToggleCollapse">@Value.Name</p>
-            <input placeholder="Заголовок" type="text" @bind-value="this.name"
-                class="todoitem__title todoitem__input input @(this.collapsed ? "hidden": "")" />
-            <div class="todoitem__toggler toggler @(this.collapsed ? "" : "toggler--opened")" @onclick="ToggleCollapse">
-            </div>
+            <p class="todoitem__index">@RowNumber.</p>
+            <input placeholder="Заголовок" type="text"
+                   @bind-value="this.name"
+                   class="todoitem__title todoitem__input input" />
+            <div class="todoitem__toggler toggler toggler--opened"
+                 @onclick="CancelEdit"></div>
         </div>
-        <form class="todolist__form @(this.collapsed ? "hidden": "")">
+        <div class="todolist__form">
             <textarea placeholder="Описание" type="text" class="todoitem__textarea textarea"
                 @oninput="HandleContent">@this.content</textarea>
             <button class="btn btn--primary" type="submit"
-                @onclick="async () => await StateChanged(Value.State)">Сохранить</button>
-        </form>
+                @onclick="async () => await StateChanged(Value.State)">
+                Сохранить
+            </button>
+        </div>
     </div>
 }
 else
@@ -34,14 +36,13 @@ else
                     <p class="todoitem__chip chip chip--@chipType" title="@caption: @dateString">@dateString</p>
                 }
             </div>
-            <div class="todoitem__toggler toggler @(this.collapsed ? "" : "toggler--opened")" @onclick="ToggleCollapse">
-            </div>
+            <div class="todoitem__toggler toggler @(this.collapsed ? "" : "toggler--opened")" @onclick="ToggleCollapse"></div>
         </div>
         <pre class="todoitem__content @(this.collapsed ? "hidden" : "")">
             @Value.Content
             <span class="todoitem__buttons">
-                <button class="btn btn--text" type="submit" @onclick="EnableEdit">Изменить</button>
-                <button class="btn btn--text" type="submit"
+                <button class="btn btn--text" @onclick="EnableEdit">Изменить</button>
+                <button class="btn btn--text"
                     @onclick="async () => await StateChanged(Value.State == ToDoState.Created ? ToDoState.Finished : ToDoState.Created)">
                     @(Value.State == ToDoState.Created ? "Завершить" : "Восстановить")
                 </button>

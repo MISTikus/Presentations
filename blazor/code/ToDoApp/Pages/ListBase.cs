@@ -23,8 +23,8 @@ namespace ToDoApp {
         }
 
         protected async Task ItemChanged(ToDoItem item) {
-            this.items.RemoveAll(x => x.Id == item.Id);
-            this.items.Add(item);
+            var index = this.items.FindIndex(x => x.Id == item.Id);
+            this.items[index] = item;
             await Storage.SetAsync(Consts.ItemsStorageKey, items);
         }
 

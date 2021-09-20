@@ -3,7 +3,7 @@ using System;
 using System.Threading.Tasks;
 
 namespace ToDoApp {
-    public partial class ItemCard : ItemCardBase {
+    public partial class ItemCard {
         private bool isEditEnabled;
 
         [Parameter] public ToDoItem Value { get; set; }
@@ -19,12 +19,14 @@ namespace ToDoApp {
         }
 
         private async Task StateChanged(ToDoState state) {
-            Value = Value with { Name = name, Content = content };
-
-            if (state == ToDoState.Finished)
-                Value = Value with { State = state, Archived = DateTime.UtcNow };
-            else
-                Value = Value with { State = state, Archived = null };
+            Value = Value with {
+                Name = name,
+                Content = content,
+                State = state,
+                Archived = state == ToDoState.Finished
+                    ? DateTime.UtcNow
+                    : null
+                };
 
             await ValueChanged.InvokeAsync(Value);
 
@@ -36,8 +38,15 @@ namespace ToDoApp {
 
         private void EnableEdit() {
             this.isEditEnabled = true;
-            Focus();
             StateHasChanged();
+            Focus();
+        }
+
+        private void CancelEdit() {
+            this.name = Value.Name;
+            this.content = Value.Content;
+            this.isEditEnabled = false;
+            this.collapsed = true;
         }
     }
 }
