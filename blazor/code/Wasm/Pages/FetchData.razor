@@ -1,5 +1,7 @@
-@page "/fetchdata"
+﻿@page "/fetchdata"
 @inject HttpClient Http
+
+<PageTitle>Weather forecast</PageTitle>
 
 <h1>Weather forecast</h1>
 
@@ -35,21 +37,19 @@ else
 }
 
 @code {
-    private WeatherForecast[] forecasts;
+    private WeatherForecast[]? forecasts;
 
+    // One of base abstract methods. After ctor, before render.
     protected override async Task OnInitializedAsync()
-    {
+    {   // Not actualy API request... It`s a simple GET from server
         forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("sample-data/weather.json");
     }
 
     public class WeatherForecast
     {
         public DateTime Date { get; set; }
-
         public int TemperatureC { get; set; }
-
-        public string Summary { get; set; }
-
+        public string? Summary { get; set; }
         public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
     }
 }

@@ -47,7 +47,7 @@
 @code {
     private bool searching;
     private bool focusSearch;
-    private string currentPage;
+    private string? currentPage;
     private string searchQuery = string.Empty;
 
     protected override void OnInitialized()
@@ -85,7 +85,7 @@
             this.focusSearch = true;
     }
 
-    private void OnSearch(KeyboardEventArgs args = null)
+    private void OnSearch(KeyboardEventArgs? args = null)
     {
         if (args is not null &&
             args.Code != "Enter" &&

@@ -21,7 +21,6 @@
 		"explorer.openEditors.visible": 0,
 		"//e": "Mimic GitHub style",
 		"editor.renderWhitespace": "none",
-		"editor.renderIndentGuides": false,
 		"//f": "This is GitHub font style",
 		"!f": "You need to install this font on your machine",
 		"editor.fontFamily": "SF Mono",
@@ -40,6 +39,10 @@
 		"//j": "Prevent the editor to magically edit code on save",
 		"editor.formatOnSave": false,
 		"//k": "Disable preview so we can open all files at once",
-		"workbench.editor.enablePreview": false
+		"workbench.editor.enablePreview": false,
+		"editor.guides.indentation": false,
+		"markdown.styles": [
+			"preview.css"
+		],
 	}
 }

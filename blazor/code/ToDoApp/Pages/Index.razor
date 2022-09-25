@@ -5,8 +5,8 @@
 <h1 class="main__title">Мои дела</h1>
 
 <div class="main__todolist todolist">
-    @{ 
-        var num = 1; 
+    @{
+        var num = 1;
         @foreach (var item in this.items.Where(x => x.State != ToDoState.Finished).OrderBy(x => x.Created))
         {
             <ItemCard Value="item" RowNumber="num++" ValueChanged="ItemChanged" />
@@ -18,6 +18,8 @@
 @code {
     private async Task AddItem(ToDoItem item)
     {
+        if (Storage is null)
+            throw new ArgumentNullException(nameof(Storage));
         this.items.Add(item);
         await Storage.SetAsync(Consts.ItemsStorageKey, items);
     }

@@ -1,6 +1,7 @@
-namespace ToDoApp {
-    public enum ToDoState : byte {
-        Created,
-        Finished
-    }
+namespace ToDoApp;
+
+public enum ToDoState : byte
+{
+    Created,
+    Finished
 }

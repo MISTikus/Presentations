@@ -1,52 +1,59 @@
 using Microsoft.AspNetCore.Components;
-using System;
-using System.Threading.Tasks;
 
-namespace ToDoApp {
-    public partial class ItemCard {
-        private bool isEditEnabled;
+namespace ToDoApp;
 
-        [Parameter] public ToDoItem Value { get; set; }
+public partial class ItemCard
+{
+    private bool isEditEnabled;
 
-        [Parameter] public EventCallback<ToDoItem> ValueChanged { get; set; }
+    [Parameter] public ToDoItem? Value { get; set; }
 
-        protected override void OnParametersSet() {
-            if (Value is null)
-                throw new ArgumentNullException(nameof(Value));
+    [Parameter] public EventCallback<ToDoItem> ValueChanged { get; set; }
 
-            name = Value.Name;
-            content = Value.Content;
-        }
+    protected override void OnParametersSet()
+    {
+        if (Value is null)
+            throw new ArgumentNullException(nameof(Value));
 
-        private async Task StateChanged(ToDoState state) {
-            Value = Value with {
-                Name = name,
-                Content = content,
-                State = state,
-                Archived = state == ToDoState.Finished
-                    ? DateTime.UtcNow
-                    : null
-                };
+        name = Value.Name;
+        content = Value.Content;
+    }
 
-            await ValueChanged.InvokeAsync(Value);
+    private async Task StateChanged(ToDoState state)
+    {
+        if (Value is null)
+            throw new ArgumentNullException(nameof(Value));
 
-            if (this.isEditEnabled)
-                this.isEditEnabled = false;
-            else
-                ToggleCollapse();
-        }
+        Value = Value with
+        {
+            Name = name,
+            Content = content,
+            State = state,
+            Archived = state == ToDoState.Finished
+                ? DateTime.UtcNow
+                : null
+        };
 
-        private void EnableEdit() {
-            this.isEditEnabled = true;
-            StateHasChanged();
-            Focus();
-        }
+        await ValueChanged.InvokeAsync(Value);
 
-        private void CancelEdit() {
-            this.name = Value.Name;
-            this.content = Value.Content;
-            this.isEditEnabled = false;
-            this.collapsed = true;
-        }
+        if (isEditEnabled)
+            isEditEnabled = false;
+        else
+            ToggleCollapse();
+    }
+
+    private void EnableEdit()
+    {
+        isEditEnabled = true;
+        StateHasChanged();
+        Focus();
+    }
+
+    private void CancelEdit()
+    {
+        name = Value?.Name ?? string.Empty;
+        content = Value?.Content ?? string.Empty;
+        isEditEnabled = false;
+        collapsed = true;
     }
 }

@@ -2,6 +2,8 @@
 @page "/{UserName}"
 @page "/{UserName}/{Age:int}"
 
+<PageTitle>Index</PageTitle>
+
 <h1>
     Hello, @(string.IsNullOrWhiteSpace(UserName) ? "world" : UserName)!
 </h1>
@@ -13,7 +15,7 @@
 
 @code {
     [Parameter]
-    public string UserName { get; set; }
+    public string? UserName { get; set; }
     [Parameter]
     public int? Age { get; set; }
 }

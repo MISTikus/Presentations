@@ -16,8 +16,8 @@
 
 
 @code {
-    [Parameter] public string Query { get; set; }
+    [Parameter] public string? Query { get; set; }
     private IEnumerable<ToDoItem> filtered => items
-        .Where(x => x.Name.ToLower().Contains(Query.ToLower()) || x.Content.ToLower().Contains(Query.ToLower()))
+        .Where(x => x.Name.ToLower().Contains(Query?.ToLower() ?? string.Empty) || x.Content.ToLower().Contains(Query?.ToLower() ?? string.Empty))
         .OrderBy(x => x.Created);
 }
